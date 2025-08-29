@@ -23,11 +23,13 @@ contains
 proofs:
 3rd
 
-Ryan:
-+
-&
--
-to_string()
+---
+
+Ryan
+'+'
+'&'
+'-'
+'to_string()'
 
 proof last one
 
