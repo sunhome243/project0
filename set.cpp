@@ -14,9 +14,9 @@
 class Node
 {
 public:
-    int data;     // Integer value stored in the node
-    Node *next;   // Pointer to the next node in the list
-    
+    int data;   // Integer value stored in the node
+    Node *next; // Pointer to the next node in the list
+
     /**
      * Constructor: Creates a new node with given value
      * @param value - Integer value to store in the node
@@ -32,16 +32,23 @@ public:
 class Set
 {
 private:
-    Node *head;   // Pointer to the first node in the list
-    int size;     // Number of elements currently in the set
+    Node *head; // Pointer to the first node in the list
+    int size;   // Number of elements currently in the set
+
+public:
+    /**
+     * Constructor: Creates an empty set
+     * Initializes head pointer to nullptr and size to 0
+     */
+    Set() : head(nullptr), size(0) {}
 
     /**
-     * Private helper method to search for a value in the set
-     * @param value - Integer value to search for
+     * Check if a value exists in the set
+     * @param value - Integer value to check for membership
      * @return true if value exists in the set, false otherwise
      * Time Complexity: O(n) where n is the number of elements
      */
-    bool search(int value)
+    bool contains(int value)
     {
         Node *current = head;
         while (current != nullptr)
@@ -55,13 +62,6 @@ private:
         return false; // Value not found in the set
     }
 
-public:
-    /**
-     * Constructor: Creates an empty set
-     * Initializes head pointer to nullptr and size to 0
-     */
-    Set() : head(nullptr), size(0) {}
-
     /**
      * Insert a value into the set
      * If value already exists, no insertion occurs (maintains uniqueness)
@@ -71,11 +71,11 @@ public:
      */
     void insert(int value)
     {
-        if (!search(value))  // Only insert if value doesn't already exist
+        if (!contains(value)) // Only insert if value doesn't already exist
         {
             Node *newNode = new Node(value);
-            newNode->next = head;  // Link new node to current head
-            head = newNode;        // Update head to point to new node
+            newNode->next = head; // Link new node to current head
+            head = newNode;       // Update head to point to new node
             size++;
         };
     };
@@ -89,7 +89,7 @@ public:
      */
     void remove(int value)
     {
-        if (search(value))  // Only attempt removal if value exists
+        if (contains(value)) // Only attempt removal if value exists
         {
             Node *current = head;
 
@@ -97,8 +97,8 @@ public:
             if (current->data == value)
             {
                 Node *temp = head;
-                head = head->next;  // Update head to next node
-                delete temp;        // Free memory
+                head = head->next; // Update head to next node
+                delete temp;       // Free memory
                 size--;
                 return;
             }
@@ -111,9 +111,9 @@ public:
                 {
                     current = current->next;
                 }
-                Node *temp = current->next;           // Node to be removed
-                current->next = current->next->next;  // Link around the removed node
-                delete temp;                          // Free memory
+                Node *temp = current->next;          // Node to be removed
+                current->next = current->next->next; // Link around the removed node
+                delete temp;                         // Free memory
                 size--;
             }
         }
