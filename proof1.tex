@@ -1,3 +1,35 @@
-Prove inductively that a set S with cardinality n ≥ 1 has exactly 2^n unique subsets.
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
-Sunho Kim
+\title{Proof: Cardinality of Power Sets}
+\author{Sunho Kim}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Statement}
+Prove inductively that a set $S$ with cardinality $n \geq 1$ has exactly $2^n$ unique subsets.
+
+\section{Proof}
+
+Let $P(n)$ be the statement: a set $S$ with cardinality $n \geq 1$ has exactly $2^n$ unique subsets.
+
+\subsection{Base Case}
+For $n = 1$, a set $S$ with cardinality 1 has $2^1 = 2$ unique subsets: $\{\emptyset, \{a\}\}$. Thus, the base case holds for $n = 1$.
+
+\subsection{Inductive Case}
+\textbf{Inductive Hypothesis:} Assume $P(k)$ holds for an arbitrary natural number $k$, which means a set $S$ with cardinality $k$ has exactly $2^k$ unique subsets.
+
+\textbf{Inductive Step:} We want to show that a set $S$ with cardinality $k+1$ has exactly $2^{k+1}$ unique subsets.
+
+When we add one more element (let this new element be $x$) to set $S$ that has cardinality $k$, we can form new subsets in the following way: for all original subsets of $S$, we can create a new subset by including the new element $x$. This means that for each of the original subsets of $S$, we can create a corresponding new subset by adding $x$.
+
+Since there are $2^k$ original subsets of $S$ (by the inductive hypothesis), we can create $2^k$ new subsets by adding the element $x$ to each of those original subsets. This results in a total of $2^k + 2^k = 2 \cdot 2^k = 2^{k+1}$ unique subsets.
+
+\section{Conclusion}
+Since both the base case and inductive case hold, by mathematical induction we conclude that for all $n \geq 1$, a set $S$ with cardinality $n$ has exactly $2^n$ unique subsets.
+
+\end{document}
