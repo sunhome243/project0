@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\title{Proof 3}
+\author{Flynn}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Question}
+Prove inductively that the complement of the union of any $n$ sets $S_1, S_2, \ldots, S_n$ is equivalent to the intersection of each of their individual complements (i.e., that $\overline{S_1 \cup S_2 \cup \cdots \cup S_n} = \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_n}$) for all $n \geq 1$.
+
+\textbf{Hint:} it may be helpful to remember De Morgan's Law: $\overline{S \cup T} = \overline{S} \cap \overline{T}$
+
+\section{Proof by Mathematical Induction}
+
+For any collection of sets $S_1, S_2, \ldots, S_n$, we want to show that 
+$$\overline{S_1 \cup S_2 \cup \cdots \cup S_n} = \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_n}$$
+for all positive integers $n \geq 1$.
+
+We proceed by mathematical induction on $n$.
+
+\subsection{Base Case ($n = 1$)}
+When we have only one set, we need to show that $\overline{S_1} = \overline{S_1}$.
+
+This statement is clearly true by the reflexive property of equality, as any set is equal to itself.
+
+\subsection{Base Case ($n = 2$)}
+For the case where we have two sets, we need to demonstrate that $\overline{S_1 \cup S_2} = \overline{S_1} \cap \overline{S_2}$.
+
+This equality is precisely the statement of De Morgan's Law for two sets, which is given as our foundational rule. Therefore, our base case for $n = 2$ holds true.
+
+\subsection{Inductive Hypothesis}
+Let us assume that the statement is true for some arbitrary positive integer $n = k$, where $k \geq 2$. That is, we assume that for any collection of $k$ sets, the following equality holds:
+$$\overline{S_1 \cup S_2 \cup \cdots \cup S_k} = \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_k}$$
+
+\subsection{Inductive Step}
+Now we must prove that if the statement is true for $n = k$, then it must also be true for $n = k + 1$. We need to establish that:
+$$\overline{S_1 \cup S_2 \cup \cdots \cup S_k \cup S_{k+1}} = \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_k} \cap \overline{S_{k+1}}$$
+
+Starting with the left-hand side of our desired equality, we can rewrite the union of $k+1$ sets by grouping the first $k$ sets together:
+
+$$\overline{S_1 \cup S_2 \cup \cdots \cup S_k \cup S_{k+1}} = \overline{(S_1 \cup S_2 \cup \cdots \cup S_k) \cup S_{k+1}}$$
+
+This regrouping is valid due to the associative property of set union operations.
+
+Next, we can apply De Morgan's Law for two sets to this expression, treating $(S_1 \cup S_2 \cup \cdots \cup S_k)$ as our first set and $S_{k+1}$ as our second set:
+
+$$= \overline{(S_1 \cup S_2 \cup \cdots \cup S_k)} \cap \overline{S_{k+1}}$$
+
+Now we can apply our inductive hypothesis to the first term $\overline{(S_1 \cup S_2 \cup \cdots \cup S_k)}$, since we assumed the statement holds for $k$ sets:
+
+$$= (\overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_k}) \cap \overline{S_{k+1}}$$
+
+Finally, we can remove the parentheses using the associative property of set intersection:
+
+$$= \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_k} \cap \overline{S_{k+1}}$$
+
+This is exactly what we wanted to prove for the case $n = k + 1$.
+
+\subsection{Conclusion}
+Since we have established that the statement holds for our base cases ($n = 1$ and $n = 2$), and we have shown that if the statement is true for any positive integer $k$, then it must also be true for $k + 1$, we can conclude by the principle of mathematical induction that:
+$$\overline{S_1 \cup S_2 \cup \cdots \cup S_n} = \overline{S_1} \cap \overline{S_2} \cap \cdots \cap \overline{S_n}$$
+holds for all positive integers $n \geq 1$. This completes our proof of the generalized De Morgan's Law.
+
+\end{document}
