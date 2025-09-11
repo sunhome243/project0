@@ -188,7 +188,7 @@ public:
         return true;
     }
     template <typename T>
-    Set<T> operator+(const Set<T> &other) const
+    Set<T> Set<T>::operator+(const Set<T> &other) const
     {
         // Pre-condition: Both set exist
         // Post condition: Returns the set of union of the two set
@@ -213,7 +213,7 @@ public:
         return result;
     }
     template <typename T>
-    Set<T> operator&(const Set<T> &other) const
+    Set<T> Set<T>::operator&(const Set<T> &other) const
     {
         // Pre-condition: Both set exist
         // Post condition: Returns the set of intersection of the two set
@@ -235,7 +235,7 @@ public:
     }
 
     template <typename T>
-    Set<T> operator-(const Set<T> &other) const
+    Set<T> Set<T>::operator-(const Set<T> &other) const
     {
         // Pre-condition: Both set exist
         // Post-condition: Returns the set with unique values of this set 
