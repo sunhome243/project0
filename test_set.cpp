@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cassert>
 #include "set.h"
+#include <climits>
 
 using namespace std;
 
@@ -612,6 +613,273 @@ void time_test()
     cout << "Total time: " << total << endl;
 }
 
+void test_empty_set_operations() {
+    cout << "=== Empty Set Edge Cases ===" << endl;
+    
+    Set<int> empty;
+    
+    // Operations on empty set
+    empty.remove(1);                    // Remove from empty
+    empty.remove(0);                    // Remove zero from empty
+    empty.remove(-1);                   // Remove negative from empty
+    cout << "Empty after removes: " << empty.empty() << endl;
+    
+    // Contains on empty
+    cout << "Empty contains 0: " << empty.contains(0) << endl;
+    cout << "Empty contains INT_MAX: " << empty.contains(INT_MAX) << endl;
+    cout << "Empty contains INT_MIN: " << empty.contains(INT_MIN) << endl;
+    
+    // to_string on empty
+    cout << "Empty to_string: '" << empty.to_string() << "'" << endl;
+    cout << "Empty to_string length: " << empty.to_string().length() << endl;
+}
+
+void test_single_element_boundaries() {
+    cout << "\n=== Single Element Boundaries ===" << endl;
+    
+    // Single element operations
+    Set<int> single;
+    single.insert(42);
+    
+    cout << "Single element to_string: '" << single.to_string() << "'" << endl;
+    
+    // Remove the only element
+    single.remove(42);
+    cout << "After removing only element - empty: " << single.empty() << endl;
+    cout << "After removing only element - cardinality: " << single.cardinality() << endl;
+    cout << "After removing only element - to_string: '" << single.to_string() << "'" << endl;
+    
+    // Insert same element multiple times
+    Set<int> duplicates;
+    duplicates.insert(5);
+    duplicates.insert(5);
+    duplicates.insert(5);
+    cout << "After multiple same inserts - cardinality: " << duplicates.cardinality() << endl;
+}
+
+void test_integer_boundaries() {
+    cout << "\n=== Integer Boundary Values ===" << endl;
+    
+    Set<int> boundaries;
+    
+    // Test boundary integer values
+    boundaries.insert(INT_MAX);         // 2147483647
+    boundaries.insert(INT_MIN);         // -2147483648
+    boundaries.insert(0);
+    boundaries.insert(-1);
+    boundaries.insert(1);
+    
+    cout << "Boundary set cardinality: " << boundaries.cardinality() << endl;
+    cout << "Contains INT_MAX: " << boundaries.contains(INT_MAX) << endl;
+    cout << "Contains INT_MIN: " << boundaries.contains(INT_MIN) << endl;
+    cout << "Contains 0: " << boundaries.contains(0) << endl;
+    
+    // Remove boundary values
+    boundaries.remove(INT_MAX);
+    cout << "After removing INT_MAX, contains it: " << boundaries.contains(INT_MAX) << endl;
+    
+    boundaries.remove(INT_MIN);
+    cout << "After removing INT_MIN, contains it: " << boundaries.contains(INT_MIN) << endl;
+}
+
+void test_string_edge_cases() {
+    cout << "\n=== String Edge Cases ===" << endl;
+    
+    Set<string> str_set;
+    
+    // Empty string
+    str_set.insert("");
+    cout << "Empty string inserted, cardinality: " << str_set.cardinality() << endl;
+    cout << "Contains empty string: " << str_set.contains("") << endl;
+    
+    // Single character strings
+    str_set.insert("a");
+    str_set.insert(" ");               // Space
+    str_set.insert("\n");              // Newline
+    str_set.insert("\t");              // Tab
+    
+    cout << "Special chars cardinality: " << str_set.cardinality() << endl;
+    cout << "Contains space: " << str_set.contains(" ") << endl;
+    cout << "Contains newline: " << str_set.contains("\n") << endl;
+    
+    // to_string with empty string in set
+    cout << "String set to_string: '" << str_set.to_string() << "'" << endl;
+}
+
+void test_equality_edge_cases() {
+    cout << "\n=== Equality Edge Cases ===" << endl;
+    
+    // Self equality
+    Set<int> self;
+    self.insert(1);
+    self.insert(2);
+    cout << "Self equality: " << (self == self) << endl;
+    
+    // Empty sets equality
+    Set<int> empty1, empty2;
+    cout << "Two empty sets equal: " << (empty1 == empty2) << endl;
+    
+    // Different sizes
+    Set<int> size1, size2;
+    size1.insert(1);
+    size2.insert(1);
+    size2.insert(2);
+    cout << "Different sizes equal: " << (size1 == size2) << endl;
+    
+    // Same elements, different order
+    Set<int> order1, order2;
+    order1.insert(1);
+    order1.insert(2);
+    order1.insert(3);
+    
+    order2.insert(3);
+    order2.insert(1);
+    order2.insert(2);
+    cout << "Same elements different order equal: " << (order1 == order2) << endl;
+}
+
+void test_subset_edge_cases() {
+    cout << "\n=== Subset Edge Cases ===" << endl;
+    
+    // Empty subset relationships
+    Set<int> empty, non_empty;
+    non_empty.insert(1);
+    
+    cout << "Empty <= Empty: " << (empty <= empty) << endl;
+    cout << "Empty <= NonEmpty: " << (empty <= non_empty) << endl;
+    cout << "NonEmpty <= Empty: " << (non_empty <= empty) << endl;
+    
+    // Self subset
+    Set<int> self_sub;
+    self_sub.insert(1);
+    self_sub.insert(2);
+    cout << "Self subset: " << (self_sub <= self_sub) << endl;
+    
+    // Equal sets are mutual subsets
+    Set<int> equal1, equal2;
+    equal1.insert(5);
+    equal1.insert(10);
+    equal2.insert(10);
+    equal2.insert(5);
+    
+    cout << "Equal1 <= Equal2: " << (equal1 <= equal2) << endl;
+    cout << "Equal2 <= Equal1: " << (equal2 <= equal1) << endl;
+    
+    // Single element subset
+    Set<int> single_elem, multi_elem;
+    single_elem.insert(7);
+    multi_elem.insert(7);
+    multi_elem.insert(8);
+    multi_elem.insert(9);
+    
+    cout << "Single element subset: " << (single_elem <= multi_elem) << endl;
+}
+
+void test_memory_boundaries() {
+    cout << "\n=== Memory/Copy Edge Cases ===" << endl;
+    
+    // Self assignment
+    Set<int> self_assign;
+    self_assign.insert(1);
+    self_assign.insert(2);
+    self_assign = self_assign;
+    cout << "Self assignment cardinality: " << self_assign.cardinality() << endl;
+    cout << "Self assignment contains 1: " << self_assign.contains(1) << endl;
+    
+    // Copy empty set
+    Set<int> empty_orig;
+    Set<int> empty_copy(empty_orig);
+    cout << "Copy of empty set is empty: " << empty_copy.empty() << endl;
+    
+    // Assign to non-empty from empty
+    Set<int> target;
+    target.insert(99);
+    target = empty_orig;
+    cout << "Assign empty to non-empty result empty: " << target.empty() << endl;
+}
+
+void test_remove_edge_cases() {
+    cout << "\n=== Remove Edge Cases ===" << endl;
+    
+    Set<int> remove_test;
+    remove_test.insert(1);
+    remove_test.insert(2);
+    remove_test.insert(3);
+    
+    // Remove head (first inserted is last in list due to head insertion)
+    remove_test.remove(3);
+    cout << "After removing head, cardinality: " << remove_test.cardinality() << endl;
+    cout << "After removing head, to_string: '" << remove_test.to_string() << "'" << endl;
+    
+    // Remove non-existent
+    remove_test.remove(99);
+    cout << "After removing non-existent, cardinality: " << remove_test.cardinality() << endl;
+    
+    // Remove same element twice
+    remove_test.remove(2);
+    remove_test.remove(2);  // Remove again
+    cout << "After removing same element twice, cardinality: " << remove_test.cardinality() << endl;
+    
+    // Remove last remaining
+    remove_test.remove(1);
+    cout << "After removing last element, empty: " << remove_test.empty() << endl;
+    
+    // Remove from now-empty set
+    remove_test.remove(1);
+    cout << "Remove from empty set, still empty: " << remove_test.empty() << endl;
+}
+
+void test_contains_edge_cases() {
+    cout << "\n=== Contains Edge Cases ===" << endl;
+    
+    Set<int> contains_test;
+    
+    // Contains on empty
+    cout << "Empty set contains 0: " << contains_test.contains(0) << endl;
+    
+    // Add and test immediately
+    contains_test.insert(42);
+    cout << "Immediately after insert, contains 42: " << contains_test.contains(42) << endl;
+    
+    // Test boundary of what was inserted
+    cout << "Contains 41: " << contains_test.contains(41) << endl;
+    cout << "Contains 43: " << contains_test.contains(43) << endl;
+    
+    // Remove and test immediately
+    contains_test.remove(42);
+    cout << "Immediately after remove, contains 42: " << contains_test.contains(42) << endl;
+}
+
+void test_insertion_order_edge_cases() {
+    cout << "\n=== Insertion Order Edge Cases ===" << endl;
+    
+    Set<int> order_test;
+    
+    // Insert in ascending order
+    order_test.insert(1);
+    order_test.insert(2);
+    order_test.insert(3);
+    cout << "Ascending insertion to_string: '" << order_test.to_string() << "'" << endl;
+    
+    Set<int> desc_test;
+    // Insert in descending order  
+    desc_test.insert(3);
+    desc_test.insert(2);
+    desc_test.insert(1);
+    cout << "Descending insertion to_string: '" << desc_test.to_string() << "'" << endl;
+    
+    Set<int> random_test;
+    // Insert in random order
+    random_test.insert(2);
+    random_test.insert(1);
+    random_test.insert(3);
+    cout << "Random insertion to_string: '" << random_test.to_string() << "'" << endl;
+    
+    // All should be equal despite different insertion orders
+    cout << "All insertion orders equal: " << 
+        ((order_test == desc_test) && (desc_test == random_test)) << endl;
+}
+
 int main()
 {
     cout << "Starting Set Implementation Tests" << endl;
@@ -636,6 +904,16 @@ int main()
     test_intersection_operator();
     test_difference_operator();
     test_operator_combinations();
+    test_empty_set_operations();
+    test_single_element_boundaries();
+    test_integer_boundaries();
+    test_string_edge_cases();
+    test_equality_edge_cases();
+    test_subset_edge_cases();
+    test_memory_boundaries();
+    test_remove_edge_cases();
+    test_contains_edge_cases();
+    test_insertion_order_edge_cases();
     time_test();
 
     cout << endl
