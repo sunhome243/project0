@@ -257,3 +257,28 @@ public:
     }
 
 };
+
+    template <typename T>
+    string Set<T>::to_string() const {
+    // Pre-condition: Set exists
+    // Post-condition: Returns string representation of set elements separated by spaces
+    
+        if (empty()) {
+            return "";
+        }
+    
+        stringstream ss;
+        Node* current = head;
+        bool first = true;
+    
+        while (current != nullptr) {
+            if (!first) {
+                ss << " ";
+            }
+            ss << current->data;
+            first = false;
+            current = current->next;
+        }
+    
+        return ss.str();
+    }
