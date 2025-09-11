@@ -534,9 +534,17 @@ void test_operator_combinations()
 void time_test()
 {
     Set<int> S;
-    // TO-DO: generate large set
+    // Insert many elements
+    for (int i = 0; i < 10000; i++)
+    {
+        S.insert(i);
+    }
     Set<int> T;
-    // TO-DO: generate large set
+    // Insert many elements
+    for (int i = 0; i < 10000; i++)
+    {
+        T.insert(i);
+    }
     int total = 0;
 
     int val = rand() % 100000;
@@ -922,11 +930,11 @@ int main()
 
     if (tests_passed == total_tests)
     {
-        cout << "O All tests PASSED!" << endl;
+        cout << "Good. All tests PASSED!" << endl;
     }
     else
     {
-        cout << "X Some tests FAILED!" << endl;
+        cout << "Failed. Some tests FAILED!" << endl;
     }
 
     return 0;
