@@ -11,12 +11,12 @@
  * Node class for singly linked list implementation
  * Template class to support different data types
  */
-template<class T>
+template<typename T>
 class Node
 {
 public:
     T data;      // Value stored in the node
-    Node *next;  // Pointer to the next node in the list
+    Node<T> *next;  // Pointer to the next node in the list
 
     /**
      * Constructor: Creates a new node with given value
@@ -125,7 +125,7 @@ public:
         // Pre-condition: Set exists
         // Post-condition: Returns true if x is in set, false otherwise
 
-        Node *current = head;
+        Node<T> *current = head;
         while (current != nullptr)
         {
             if (current->data == x)
@@ -144,7 +144,7 @@ public:
         // Post-condition: Returns true if sets contain same elements, false otherwise
 
         // Check if all elements in this set are in other set
-        Node *current = head;
+        Node<T> *current = head;
         while (current != nullptr)
         {
             if (!other.contains(current->data))
@@ -175,7 +175,7 @@ public:
         // Post-condition: Returns true if this set is subset of other set, false otherwise
 
         // Check if all elements in this set are in other set
-        Node *current = head;
+        Node<T> *current = head;
         while (current != nullptr)
         {
             if (!other.contains(current->data))
@@ -187,4 +187,29 @@ public:
 
         return true;
     }
+    template <typename T>
+    Set<T> Set<T>::operator+(const Set<T> &other) const
+    {
+        // Create a new set to hold the union
+        Set<T> result;
+        
+        // Insert all elements from the other set
+        Node<T> *current = other.head;
+        while (current != nullptr)
+        {
+            result.insert(current->data);
+            current = current->next;
+        }
+        
+        // Insert all elements from this set
+        current = head;
+        while (current != nullptr)
+        {
+            result.insert(current->data);
+            current = current->next;
+        }
+        
+        return result;
+    }
+
 };
