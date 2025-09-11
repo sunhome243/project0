@@ -188,7 +188,7 @@ public:
         return true;
     }
     template <typename T>
-    Set<T> Set<T>::operator+(const Set<T> &other) const
+    Set<T> operator+(const Set<T> &other) const
     {
         // Create a new set to hold the union
         Set<T> result;
@@ -206,6 +206,45 @@ public:
         while (current != nullptr)
         {
             result.insert(current->data);
+            current = current->next;
+        }
+        
+        return result;
+    }
+    template <typename T>
+    Set<T> operator&(const Set<T> &other) const
+    {
+        Set<T> result;
+        
+        // Iterate through this set and check if each element exists in the other set
+        Node<T> *current = head;
+        while (current != nullptr)
+        {
+            // If the element exists in both sets, add it to the result
+            if (other.contains(current->data))
+            {
+                result.insert(current->data);
+            }
+            current = current->next;
+        }
+        
+        return result;
+    }
+
+    template <typename T>
+    Set<T> operator-(const Set<T> &other) const
+    {
+        Set<T> result;
+        
+        // Iterate through this set and check if each element exists in the other set
+        Node<T> *current = head;
+        while (current != nullptr)
+        {
+            // If the element does NOT exist in the other set, add it to the result
+            if (!other.contains(current->data))
+            {
+                result.insert(current->data);
+            }
             current = current->next;
         }
         
