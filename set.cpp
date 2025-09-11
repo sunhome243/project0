@@ -190,7 +190,8 @@ public:
     template <typename T>
     Set<T> operator+(const Set<T> &other) const
     {
-        // Create a new set to hold the union
+        // Pre-condition: Both set exist
+        // Post condition: Returns the set of union of the two set
         Set<T> result;
         
         // Insert all elements from the other set
@@ -214,13 +215,15 @@ public:
     template <typename T>
     Set<T> operator&(const Set<T> &other) const
     {
+        // Pre-condition: Both set exist
+        // Post condition: Returns the set of intersection of the two set
         Set<T> result;
         
         // Iterate through this set and check if each element exists in the other set
         Node<T> *current = head;
         while (current != nullptr)
         {
-            // If the element exists in both sets, add it to the result
+            // If the element exists in both sets, add it to the result set
             if (other.contains(current->data))
             {
                 result.insert(current->data);
@@ -234,13 +237,15 @@ public:
     template <typename T>
     Set<T> operator-(const Set<T> &other) const
     {
+        // Pre-condition: Both set exist
+        // Post-condition: Returns the set with unique values of this set 
         Set<T> result;
         
         // Iterate through this set and check if each element exists in the other set
         Node<T> *current = head;
         while (current != nullptr)
         {
-            // If the element does NOT exist in the other set, add it to the result
+            // If the element doesn't exist in the other set, add it to the result set
             if (!other.contains(current->data))
             {
                 result.insert(current->data);
