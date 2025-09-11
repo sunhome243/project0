@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm}
+
+
+\title{Proof 4}
+\date{September 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\[
+S_1 \cap (S_2 \setminus S_1) = \emptyset
+\]
+
+\begin{proof}[Proof by contradiction]
+Assume for contradiction that \(S_1 \cap (S_2 \setminus S_1) \neq \emptyset\).
+Then there exists \(x\) where \(x \in S_1 \cap (S_2 \setminus S_1)\).
+By definition of intersection, \(x \in S_1\) and \(x \in S_2 \setminus S_1\).
+By definition of difference, \(x \in S_2 \setminus S_1\) indicates that \(x \in S_2\) and \(x \notin S_1\).
+Thus \(x \in S_1\) and \(x \notin S_1\), which is a contradiction.
+Therefore \(S_1 \cap (S_2 \setminus S_1) = \emptyset\).
+\end{proof}
+
+\end{document}
