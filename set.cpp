@@ -45,26 +45,6 @@ public:
     Set() : head(nullptr), size(0) {}
 
     /**
-     * Check if a value exists in the set
-     * @param value - Value to check for membership
-     * @return true if value exists in the set, false otherwise
-     * Time Complexity: O(n) where n is the number of elements
-     */
-    bool contains(const T& value)
-    {
-        Node<T> *current = head;
-        while (current != nullptr)
-        {
-            if (current->data == value)
-            {
-                return true; // Value found in the set
-            }
-            current = current->next;
-        }
-        return false; // Value not found in the set
-    }
-
-    /**
      * Insert a value into the set
      * If value already exists, no insertion occurs (maintains uniqueness)
      * New elements are inserted at the head of the list
