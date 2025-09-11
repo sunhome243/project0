@@ -34,7 +34,7 @@ void test_result(const string &test_name, bool passed)
  */
 void test_basic_insert()
 {
-    Set s;
+    Set<int> s;
 
     // Insert single element
     s.insert(5);
@@ -52,7 +52,7 @@ void test_basic_insert()
  */
 void test_insert_duplicates()
 {
-    Set s;
+    Set<int> s;
 
     s.insert(7);
     int original_size = s.cardinality();
@@ -73,7 +73,7 @@ void test_insert_duplicates()
  */
 void test_basic_remove()
 {
-    Set s;
+    Set<int> s;
     s.insert(1);
     s.insert(2);
     s.insert(3);
@@ -88,7 +88,7 @@ void test_basic_remove()
  */
 void test_remove_head()
 {
-    Set s;
+    Set<int> s;
     s.insert(10);
     s.insert(20); // 20 becomes new head
 
@@ -106,7 +106,7 @@ void test_remove_head()
  */
 void test_remove_nonexistent()
 {
-    Set s;
+    Set<int> s;
     s.insert(1);
     s.insert(2);
     int original_size = s.cardinality();
@@ -121,7 +121,7 @@ void test_remove_nonexistent()
  */
 void test_remove_from_empty()
 {
-    Set s;
+    Set<int> s;
 
     s.remove(5); // Remove from empty set
     test_result("Remove from empty set", s.cardinality() == 0);
@@ -132,7 +132,7 @@ void test_remove_from_empty()
  */
 void test_cardinality_empty()
 {
-    Set s;
+    Set<int> s;
     test_result("Cardinality of empty set", s.cardinality() == 0);
 }
 
@@ -141,7 +141,7 @@ void test_cardinality_empty()
  */
 void test_insert_insert_cardinality()
 {
-    Set s;
+    Set<int> s;
 
     s.insert(5);
     test_result("Insert one, cardinality = 1", s.cardinality() == 1);
@@ -158,7 +158,7 @@ void test_insert_insert_cardinality()
  */
 void test_remove_insert_cardinality()
 {
-    Set s;
+    Set<int> s;
     s.insert(1);
     s.insert(2);
     s.insert(3);
@@ -180,7 +180,7 @@ void test_remove_insert_cardinality()
  */
 void test_insert_delete_pattern()
 {
-    Set s;
+    Set<int> s;
 
     // Insert 5
     s.insert(5);
@@ -208,7 +208,7 @@ void test_insert_delete_pattern()
  */
 void test_contains_comprehensive()
 {
-    Set s;
+    Set<int> s;
 
     // Contains on empty set
     test_result("Contains on empty set", !s.contains(5));
@@ -235,7 +235,7 @@ void test_contains_comprehensive()
  */
 void test_large_set()
 {
-    Set s;
+    Set<int> s;
 
     // Insert many elements
     for (int i = 0; i < 100; i++)
