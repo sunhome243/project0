@@ -5,280 +5,343 @@
 // Created by Sunho Kim, Flynn Phuc Nguyen, and Ryan Reilly
 // 9/8/2025
 
-#include "set.h"
+#ifndef SET_CPP
+#define SET_CPP
 
 /**
- * Node class for singly linked list implementation
- * Template class to support different data types
+ * Constructor: Creates an empty set
+ * Pre-condition: None
+ * Post-condition: Set is initialized with no elements
  */
-template<typename T>
-class Node
-{
-public:
-    T data;      // Value stored in the node
-    Node<T> *next;  // Pointer to the next node in the list
-
-    /**
-     * Constructor: Creates a new node with given value
-     * @param value - Value to store in the node
-     */
-    Node(const T& value) : data(value), next(nullptr) {}
-};
+template <typename T>
+Set<T>::Set() : head(nullptr), size(0) {}
 
 /**
- * Set template class implemented using a singly linked list
- * Stores unique values with no duplicates allowed
- * New elements are inserted at the head of the list
+ * Destructor: Deallocates all nodes in the set
+ * Pre-condition: Set exists
+ * Post-condition: All dynamically allocated memory is freed
  */
-template<class T>
-class Set
+template <typename T>
+Set<T>::~Set()
 {
-private:
-    Node<T> *head; // Pointer to the first node in the list
-    int size;      // Number of elements currently in the set
+    clear();
+}
 
-public:
-    /**
-     * Constructor: Creates an empty set
-     * Initializes head pointer to nullptr and size to 0
-     */
-    Set() : head(nullptr), size(0) {}
+/**
+ * Copy constructor: Creates a deep copy of another set
+ * Pre-condition: Other set exists
+ * Post-condition: New set contains copies of all elements from other set
+ */
+template <typename T>
+Set<T>::Set(const Set<T> &other) : head(nullptr), size(0)
+{
+    copy_from(other);
+}
 
-    /**
-     * Insert a value into the set
-     * If value already exists, no insertion occurs (maintains uniqueness)
-     * New elements are inserted at the head of the list
-     * @param value - Value to insert
-     * Time Complexity: O(n) due to search operation
-     */
-    void insert(const T& value)
+/**
+ * Assignment operator: Assigns contents of another set to this set
+ * Pre-condition: Both sets exist
+ * Post-condition: This set contains copies of all elements from other set
+ */
+template <typename T>
+Set<T> &Set<T>::operator=(const Set<T> &other)
+{
+    if (this != &other)
     {
-        if (!contains(value)) // Only insert if value doesn't already exist
+        clear();
+        copy_from(other);
+    }
+    return *this;
+}
+
+/**
+ * Insert an element into the set
+ * Pre-condition: Set exists
+ * Post-condition: Element is added if not already present
+ */
+template <typename T>
+void Set<T>::insert(const T &value)
+{
+    if (!contains(value))
+    {
+        Node *newNode = new Node(value);
+        newNode->next = head;
+        head = newNode;
+        size++;
+    }
+}
+
+/**
+ * Remove an element from the set
+ * Pre-condition: Set exists
+ * Post-condition: Element is removed if present
+ */
+template <typename T>
+void Set<T>::remove(const T &value)
+{
+    if (contains(value))
+    {
+        Node *current = head;
+
+        // Case 1: Removing the head node
+        if (current->data == value)
         {
-            Node<T> *newNode = new Node<T>(value);
-            newNode->next = head; // Link new node to current head
-            head = newNode;       // Update head to point to new node
-            size++;
+            Node *temp = head;
+            head = head->next;
+            delete temp;
+            size--;
+            return;
         }
-    }
 
-    /**
-     * Remove a value from the set
-     * If value doesn't exist, no removal occurs
-     * Handles two cases: removing head node vs removing other nodes
-     * @param value - Value to remove
-     * Time Complexity: O(n) due to search operation
-     */
-    void remove(const T& value)
-    {
-        if (contains(value)) // Only attempt removal if value exists
+        // Case 2: Removing a non-head node
+        while (current->next != nullptr && current->next->data != value)
         {
-            Node<T> *current = head;
-
-            // Case 1: Removing the head node
-            if (current->data == value)
-            {
-                Node<T> *temp = head;
-                head = head->next; // Update head to next node
-                delete temp;       // Free memory
-                size--;
-                return;
-            }
-
-            // Case 2: Removing a non-head node
-            else
-            {
-                // Find the node before the one to be removed
-                while (current->next != nullptr && current->next->data != value)
-                {
-                    current = current->next;
-                }
-                Node<T> *temp = current->next;          // Node to be removed
-                current->next = current->next->next;    // Link around the removed node
-                delete temp;                            // Free memory
-                size--;
-            }
-        }
-    }
-
-    /**
-     * Get the number of elements in the set
-     * @return Integer representing the cardinality (size) of the set
-     * Time Complexity: O(1)
-     */
-    int cardinality()
-    {
-        return size;
-    }
-    // FLynn
-    template <typename T>
-    bool Set<T>::empty() const
-    {
-        // Pre-condition: Set exists
-        // Post-condition: Returns true if set has no elements, false otherwise
-        return head == nullptr;
-    }
-
-    template <typename T>
-    bool Set<T>::contains(const T &x) const
-    {
-        // Pre-condition: Set exists
-        // Post-condition: Returns true if x is in set, false otherwise
-
-        Node<T> *current = head;
-        while (current != nullptr)
-        {
-            if (current->data == x)
-            {
-                return true;
-            }
             current = current->next;
         }
-        return false;
+        Node *temp = current->next;
+        current->next = current->next->next;
+        delete temp;
+        size--;
+    }
+}
+
+/**
+ * Get the cardinality (number of elements) of the set
+ * Pre-condition: Set exists
+ * Post-condition: Returns the number of elements in the set
+ */
+template <typename T>
+int Set<T>::cardinality() const
+{
+    return size;
+}
+
+/**
+ * Check if the set is empty
+ * Pre-condition: Set exists
+ * Post-condition: Returns true if set has no elements, false otherwise
+ */
+template <typename T>
+bool Set<T>::empty() const
+{
+    return head == nullptr;
+}
+
+/**
+ * Check if an element exists in the set
+ * Pre-condition: Set exists
+ * Post-condition: Returns true if element is in set, false otherwise
+ */
+template <typename T>
+bool Set<T>::contains(const T &x) const
+{
+    Node *current = head;
+    while (current != nullptr)
+    {
+        if (current->data == x)
+        {
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+}
+
+/**
+ * Convert set to string representation
+ * Pre-condition: Set exists
+ * Post-condition: Returns string with elements separated by spaces
+ */
+template <typename T>
+string Set<T>::to_string() const
+{
+    if (empty())
+    {
+        return "";
     }
 
-    template <typename T>
-    bool Set<T>::operator==(const Set<T> &other) const
+    stringstream ss;
+    Node *current = head;
+    bool first = true;
+
+    while (current != nullptr)
     {
-        // Pre-condition: Both sets exist
-        // Post-condition: Returns true if sets contain same elements, false otherwise
-
-        // Check if all elements in this set are in other set
-        Node<T> *current = head;
-        while (current != nullptr)
+        if (!first)
         {
-            if (!other.contains(current->data))
-            {
-                return false;
-            }
-            current = current->next;
+            ss << " ";
         }
-
-        // Check if all elements in other set are in this set
-        current = other.head;
-        while (current != nullptr)
-        {
-            if (!this->contains(current->data))
-            {
-                return false;
-            }
-            current = current->next;
-        }
-
-        return true;
+        ss << current->data;
+        first = false;
+        current = current->next;
     }
 
-    template <typename T>
-    bool Set<T>::operator<=(const Set<T> &other) const
-    {
-        // Pre-condition: Both sets exist
-        // Post-condition: Returns true if this set is subset of other set, false otherwise
+    return ss.str();
+}
 
-        // Check if all elements in this set are in other set
-        Node<T> *current = head;
-        while (current != nullptr)
+/**
+ * Equality operator: Check if two sets contain the same elements
+ * Pre-condition: Both sets exist
+ * Post-condition: Returns true if sets are equal, false otherwise
+ */
+template <typename T>
+bool Set<T>::operator==(const Set<T> &other) const
+{
+    // Check if all elements in this set are in other set
+    Node *current = head;
+    while (current != nullptr)
+    {
+        if (!other.contains(current->data))
         {
-            if (!other.contains(current->data))
-            {
-                return false;
-            }
-            current = current->next;
+            return false;
         }
-
-        return true;
+        current = current->next;
     }
-    template <typename T>
-    Set<T> Set<T>::operator+(const Set<T> &other) const
+
+    // Check if all elements in other set are in this set
+    current = other.head;
+    while (current != nullptr)
     {
-        // Pre-condition: Both set exist
-        // Post condition: Returns the set of union of the two set
-        Set<T> result;
-        
-        // Insert all elements from the other set
-        Node<T> *current = other.head;
-        while (current != nullptr)
+        if (!this->contains(current->data))
+        {
+            return false;
+        }
+        current = current->next;
+    }
+
+    return true;
+}
+
+/**
+ * Subset operator: Check if this set is a subset of another set
+ * Pre-condition: Both sets exist
+ * Post-condition: Returns true if this is a subset of other, false otherwise
+ */
+template <typename T>
+bool Set<T>::operator<=(const Set<T> &other) const
+{
+    // Check if all elements in this set are in other set
+    Node *current = head;
+    while (current != nullptr)
+    {
+        if (!other.contains(current->data))
+        {
+            return false;
+        }
+        current = current->next;
+    }
+
+    return true;
+}
+/**
+ * Union operator: Create union of two sets
+ * Pre-condition: Both sets exist
+ * Post-condition: Returns new set containing all elements from both sets
+ */
+template <typename T>
+Set<T> Set<T>::operator+(const Set<T> &other) const
+{
+    Set<T> result;
+    
+    // Insert all elements from the other set
+    Node *current = other.head;
+    while (current != nullptr)
+    {
+        result.insert(current->data);
+        current = current->next;
+    }
+    
+    // Insert all elements from this set
+    current = head;
+    while (current != nullptr)
+    {
+        result.insert(current->data);
+        current = current->next;
+    }
+    
+    return result;
+}
+/**
+ * Intersection operator: Create intersection of two sets
+ * Pre-condition: Both sets exist
+ * Post-condition: Returns new set containing common elements
+ */
+template <typename T>
+Set<T> Set<T>::operator&(const Set<T> &other) const
+{
+    Set<T> result;
+    
+    // Iterate through this set and check if each element exists in the other set
+    Node *current = head;
+    while (current != nullptr)
+    {
+        if (other.contains(current->data))
         {
             result.insert(current->data);
-            current = current->next;
         }
-        
-        // Insert all elements from this set
-        current = head;
-        while (current != nullptr)
+        current = current->next;
+    }
+    
+    return result;
+}
+
+/**
+ * Difference operator: Create difference of two sets
+ * Pre-condition: Both sets exist
+ * Post-condition: Returns new set with elements in this but not in other
+ */
+template <typename T>
+Set<T> Set<T>::operator-(const Set<T> &other) const
+{
+    Set<T> result;
+    
+    // Iterate through this set and check if each element doesn't exist in the other set
+    Node *current = head;
+    while (current != nullptr)
+    {
+        if (!other.contains(current->data))
         {
             result.insert(current->data);
-            current = current->next;
         }
-        
-        return result;
+        current = current->next;
     }
-    template <typename T>
-    Set<T> Set<T>::operator&(const Set<T> &other) const
+    
+    return result;
+}
+
+/**
+ * Clear all elements from the set
+ * Pre-condition: Set exists
+ * Post-condition: Set is empty and all memory is freed
+ */
+template <typename T>
+void Set<T>::clear()
+{
+    while (head != nullptr)
     {
-        // Pre-condition: Both set exist
-        // Post condition: Returns the set of intersection of the two set
-        Set<T> result;
-        
-        // Iterate through this set and check if each element exists in the other set
-        Node<T> *current = head;
-        while (current != nullptr)
-        {
-            // If the element exists in both sets, add it to the result set
-            if (other.contains(current->data))
-            {
-                result.insert(current->data);
-            }
-            current = current->next;
-        }
-        
-        return result;
+        Node *temp = head;
+        head = head->next;
+        delete temp;
     }
+    size = 0;
+}
 
-    template <typename T>
-    Set<T> Set<T>::operator-(const Set<T> &other) const
+/**
+ * Copy elements from another set
+ * Pre-condition: Both sets exist, this set is empty
+ * Post-condition: This set contains copies of all elements from other
+ */
+template <typename T>
+void Set<T>::copy_from(const Set<T> &other)
+{
+    // Since we insert at head, we need to traverse in reverse order
+    // to maintain the same order. For simplicity, we'll just insert
+    // and accept the reversed order (both are valid for unordered sets)
+    Node *current = other.head;
+    while (current != nullptr)
     {
-        // Pre-condition: Both set exist
-        // Post-condition: Returns the set with unique values of this set 
-        Set<T> result;
-        
-        // Iterate through this set and check if each element exists in the other set
-        Node<T> *current = head;
-        while (current != nullptr)
-        {
-            // If the element doesn't exist in the other set, add it to the result set
-            if (!other.contains(current->data))
-            {
-                result.insert(current->data);
-            }
-            current = current->next;
-        }
-        
-        return result;
+        insert(current->data);
+        current = current->next;
     }
+}
 
-};
-
-    template <typename T>
-    string Set<T>::to_string() const {
-    // Pre-condition: Set exists
-    // Post-condition: Returns string representation of set elements separated by spaces
-    
-        if (empty()) {
-            return "";
-        }
-    
-        stringstream ss;
-        Node* current = head;
-        bool first = true;
-    
-        while (current != nullptr) {
-            if (!first) {
-                ss << " ";
-            }
-            ss << current->data;
-            first = false;
-            current = current->next;
-        }
-    
-        return ss.str();
-    }
+#endif // SET_CPP
