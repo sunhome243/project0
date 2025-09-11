@@ -2,6 +2,7 @@
 #define SET_H
 
 #include <string>
+#include <sstream>
 using namespace std;
 
 template <typename T>

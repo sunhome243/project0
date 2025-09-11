@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "set.cpp"
+#include "set.h"
 
 using namespace std;
 
@@ -266,7 +266,7 @@ void test_large_set()
 void test_equality_operator()
 {
     // Test empty sets
-    Set s1, s2;
+    Set<int> s1, s2;
     test_result("Empty sets equality", s1 == s2);
 
     // Test identical sets
@@ -279,27 +279,27 @@ void test_equality_operator()
     test_result("Identical sets equality", s1 == s2);
 
     // Test different order (should still be equal)
-    Set s3;
+    Set<int> s3;
     s3.insert(3);
     s3.insert(1);
     s3.insert(2);
     test_result("Same elements different order", s1 == s3);
 
     // Test different sets
-    Set s4;
+    Set<int> s4;
     s4.insert(1);
     s4.insert(2);
     s4.insert(4);
     test_result("Different sets not equal", !(s1 == s4));
 
     // Test subset not equal
-    Set s5;
+    Set<int> s5;
     s5.insert(1);
     s5.insert(2);
     test_result("Subset not equal to superset", !(s5 == s1));
 
     // Test different sizes
-    Set s6;
+    Set<int> s6;
     s6.insert(1);
     s6.insert(2);
     s6.insert(3);
@@ -313,7 +313,7 @@ void test_equality_operator()
 void test_subset_operator()
 {
     // Test empty set is subset of any set
-    Set empty, non_empty;
+    Set<int> empty, non_empty;
     non_empty.insert(1);
     non_empty.insert(2);
     test_result("Empty set subset of non-empty", empty <= non_empty);
@@ -322,25 +322,25 @@ void test_subset_operator()
     test_result("Set subset of itself", non_empty <= non_empty);
 
     // Test proper subset
-    Set subset;
+    Set<int> subset;
     subset.insert(1);
     test_result("Proper subset", subset <= non_empty);
 
     // Test not subset
-    Set not_subset;
+    Set<int> not_subset;
     not_subset.insert(1);
     not_subset.insert(3);
     test_result("Not subset (contains element not in superset)", !(not_subset <= non_empty));
 
     // Test empty set subset of empty set
-    Set empty2;
+    Set<int> empty2;
     test_result("Empty set subset of empty set", empty <= empty2);
 
     // Test non-empty not subset of empty
     test_result("Non-empty not subset of empty", !(non_empty <= empty));
 
     // Test equal sets
-    Set equal;
+    Set<int> equal;
     equal.insert(1);
     equal.insert(2);
     test_result("Equal sets are subsets", non_empty <= equal && equal <= non_empty);
@@ -352,42 +352,42 @@ void test_subset_operator()
 void test_union_operator()
 {
     // Test union of empty sets
-    Set empty1, empty2;
-    Set union_empty = empty1 + empty2;
+    Set<int> empty1, empty2;
+    Set<int> union_empty = empty1 + empty2;
     test_result("Union of empty sets", union_empty.cardinality() == 0);
 
     // Test union with one empty set
-    Set s1, s2;
+    Set<int> s1, s2;
     s1.insert(1);
     s1.insert(2);
-    Set union_with_empty = s1 + empty1;
+    Set<int> union_with_empty = s1 + empty1;
     test_result("Union with empty set", union_with_empty == s1);
 
     // Test union of disjoint sets
     s2.insert(3);
     s2.insert(4);
-    Set union_disjoint = s1 + s2;
+    Set<int> union_disjoint = s1 + s2;
     test_result("Union of disjoint sets cardinality", union_disjoint.cardinality() == 4);
     test_result("Union of disjoint sets contains all elements",
                 union_disjoint.contains(1) && union_disjoint.contains(2) &&
-                union_disjoint.contains(3) && union_disjoint.contains(4));
+                    union_disjoint.contains(3) && union_disjoint.contains(4));
 
     // Test union of overlapping sets
-    Set s3, s4;
+    Set<int> s3, s4;
     s3.insert(1);
     s3.insert(2);
     s3.insert(3);
     s4.insert(2);
     s4.insert(3);
     s4.insert(4);
-    Set union_overlapping = s3 + s4;
+    Set<int> union_overlapping = s3 + s4;
     test_result("Union of overlapping sets cardinality", union_overlapping.cardinality() == 4);
     test_result("Union of overlapping sets contains all unique elements",
                 union_overlapping.contains(1) && union_overlapping.contains(2) &&
-                union_overlapping.contains(3) && union_overlapping.contains(4));
+                    union_overlapping.contains(3) && union_overlapping.contains(4));
 
     // Test union with identical sets
-    Set union_identical = s1 + s1;
+    Set<int> union_identical = s1 + s1;
     test_result("Union of identical sets", union_identical == s1);
 }
 
@@ -397,46 +397,46 @@ void test_union_operator()
 void test_intersection_operator()
 {
     // Test intersection of empty sets
-    Set empty1, empty2;
-    Set intersection_empty = empty1 & empty2;
+    Set<int> empty1, empty2;
+    Set<int> intersection_empty = empty1 & empty2;
     test_result("Intersection of empty sets", intersection_empty.cardinality() == 0);
 
     // Test intersection with empty set
-    Set s1, empty;
+    Set<int> s1, empty;
     s1.insert(1);
     s1.insert(2);
-    Set intersection_with_empty = s1 & empty;
+    Set<int> intersection_with_empty = s1 & empty;
     test_result("Intersection with empty set", intersection_with_empty.cardinality() == 0);
 
     // Test intersection of disjoint sets
-    Set s2;
+    Set<int> s2;
     s2.insert(3);
     s2.insert(4);
-    Set intersection_disjoint = s1 & s2;
+    Set<int> intersection_disjoint = s1 & s2;
     test_result("Intersection of disjoint sets", intersection_disjoint.cardinality() == 0);
 
     // Test intersection of overlapping sets
-    Set s3, s4;
+    Set<int> s3, s4;
     s3.insert(1);
     s3.insert(2);
     s3.insert(3);
     s4.insert(2);
     s4.insert(3);
     s4.insert(4);
-    Set intersection_overlapping = s3 & s4;
+    Set<int> intersection_overlapping = s3 & s4;
     test_result("Intersection of overlapping sets cardinality", intersection_overlapping.cardinality() == 2);
     test_result("Intersection of overlapping sets contains common elements",
                 intersection_overlapping.contains(2) && intersection_overlapping.contains(3) &&
-                !intersection_overlapping.contains(1) && !intersection_overlapping.contains(4));
+                    !intersection_overlapping.contains(1) && !intersection_overlapping.contains(4));
 
     // Test intersection of identical sets
-    Set intersection_identical = s1 & s1;
+    Set<int> intersection_identical = s1 & s1;
     test_result("Intersection of identical sets", intersection_identical == s1);
 
     // Test intersection with subset
-    Set subset;
+    Set<int> subset;
     subset.insert(1);
-    Set intersection_subset = s1 & subset;
+    Set<int> intersection_subset = s1 & subset;
     test_result("Intersection with subset", intersection_subset == subset);
 }
 
@@ -446,50 +446,50 @@ void test_intersection_operator()
 void test_difference_operator()
 {
     // Test difference of empty sets
-    Set empty1, empty2;
-    Set difference_empty = empty1 - empty2;
+    Set<int> empty1, empty2;
+    Set<int> difference_empty = empty1 - empty2;
     test_result("Difference of empty sets", difference_empty.cardinality() == 0);
 
     // Test difference with empty set
-    Set s1, empty;
+    Set<int> s1, empty;
     s1.insert(1);
     s1.insert(2);
-    Set difference_with_empty = s1 - empty;
+    Set<int> difference_with_empty = s1 - empty;
     test_result("Difference with empty set", difference_with_empty == s1);
 
     // Test difference from empty set
-    Set difference_from_empty = empty - s1;
+    Set<int> difference_from_empty = empty - s1;
     test_result("Difference from empty set", difference_from_empty.cardinality() == 0);
 
     // Test difference of disjoint sets
-    Set s2;
+    Set<int> s2;
     s2.insert(3);
     s2.insert(4);
-    Set difference_disjoint = s1 - s2;
+    Set<int> difference_disjoint = s1 - s2;
     test_result("Difference of disjoint sets", difference_disjoint == s1);
 
     // Test difference of overlapping sets
-    Set s3, s4;
+    Set<int> s3, s4;
     s3.insert(1);
     s3.insert(2);
     s3.insert(3);
     s4.insert(2);
     s4.insert(3);
     s4.insert(4);
-    Set difference_overlapping = s3 - s4;
+    Set<int> difference_overlapping = s3 - s4;
     test_result("Difference of overlapping sets cardinality", difference_overlapping.cardinality() == 1);
     test_result("Difference of overlapping sets contains only unique elements",
                 difference_overlapping.contains(1) && !difference_overlapping.contains(2) &&
-                !difference_overlapping.contains(3) && !difference_overlapping.contains(4));
+                    !difference_overlapping.contains(3) && !difference_overlapping.contains(4));
 
     // Test difference of identical sets
-    Set difference_identical = s1 - s1;
+    Set<int> difference_identical = s1 - s1;
     test_result("Difference of identical sets", difference_identical.cardinality() == 0);
 
     // Test difference with subset
-    Set subset;
+    Set<int> subset;
     subset.insert(1);
-    Set difference_subset = s1 - subset;
+    Set<int> difference_subset = s1 - subset;
     test_result("Difference with subset cardinality", difference_subset.cardinality() == 1);
     test_result("Difference with subset contains remaining elements",
                 !difference_subset.contains(1) && difference_subset.contains(2));
@@ -501,35 +501,116 @@ void test_difference_operator()
 void test_operator_combinations()
 {
     // Test (A ∪ B) ∩ C
-    Set A, B, C;
+    Set<int> A, B, C;
     A.insert(1);
     A.insert(2);
     B.insert(2);
     B.insert(3);
     C.insert(2);
     C.insert(4);
-    
-    Set union_AB = A + B;
-    Set intersection_result = union_AB & C;
+
+    Set<int> union_AB = A + B;
+    Set<int> intersection_result = union_AB & C;
     test_result("Complex: (A ∪ B) ∩ C", intersection_result.contains(2) && intersection_result.cardinality() == 1);
 
     // Test (A - B) ∪ (B - A) (symmetric difference)
-    Set diff_AB = A - B;
-    Set diff_BA = B - A;
-    Set symmetric_diff = diff_AB + diff_BA;
-    test_result("Complex: Symmetric difference", 
-                symmetric_diff.contains(1) && symmetric_diff.contains(3) && 
-                !symmetric_diff.contains(2) && symmetric_diff.cardinality() == 2);
+    Set<int> diff_AB = A - B;
+    Set<int> diff_BA = B - A;
+    Set<int> symmetric_diff = diff_AB + diff_BA;
+    test_result("Complex: Symmetric difference",
+                symmetric_diff.contains(1) && symmetric_diff.contains(3) &&
+                    !symmetric_diff.contains(2) && symmetric_diff.cardinality() == 2);
 
     // Test A ⊆ (A ∪ B)
-    Set union_AB2 = A + B;
+    Set<int> union_AB2 = A + B;
     test_result("Complex: A ⊆ (A ∪ B)", A <= union_AB2);
 
     // Test (A ∩ B) ⊆ A
-    Set intersection_AB = A & B;
+    Set<int> intersection_AB = A & B;
     test_result("Complex: (A ∩ B) ⊆ A", intersection_AB <= A);
 }
 
+void time_test()
+{
+    Set<int> S;
+    // TO-DO: generate large set
+    Set<int> T;
+    // TO-DO: generate large set
+    int total = 0;
+
+    int val = rand() % 100000;
+    auto begin = std::chrono::high_resolution_clock::now();
+    S.insert(val);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "insert time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.remove(val);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "remove time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.cardinality();
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "cardinality time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.empty();
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "empty time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    val = rand() % 100000;
+    begin = std::chrono::high_resolution_clock::now();
+    bool r = S.contains(val);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "contains time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    r = (S == T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "equality time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    r = (S <= T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "subset time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    Set<int> U = (S + T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "union time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    U = (S & T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "intersection time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    U = (S - T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "difference time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+    cout << "Total time: " << total << endl;
+}
 
 int main()
 {
@@ -555,6 +636,7 @@ int main()
     test_intersection_operator();
     test_difference_operator();
     test_operator_combinations();
+    time_test();
 
     cout << endl
          << "=================================" << endl;
