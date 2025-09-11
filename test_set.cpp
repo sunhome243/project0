@@ -370,7 +370,7 @@ void test_union_operator()
     test_result("Union of disjoint sets cardinality", union_disjoint.cardinality() == 4);
     test_result("Union of disjoint sets contains all elements",
                 union_disjoint.contains(1) && union_disjoint.contains(2) &&
-                union_disjoint.contains(3) && union_disjoint.contains(4));
+                    union_disjoint.contains(3) && union_disjoint.contains(4));
 
     // Test union of overlapping sets
     Set<int> s3, s4;
@@ -384,7 +384,7 @@ void test_union_operator()
     test_result("Union of overlapping sets cardinality", union_overlapping.cardinality() == 4);
     test_result("Union of overlapping sets contains all unique elements",
                 union_overlapping.contains(1) && union_overlapping.contains(2) &&
-                union_overlapping.contains(3) && union_overlapping.contains(4));
+                    union_overlapping.contains(3) && union_overlapping.contains(4));
 
     // Test union with identical sets
     Set<int> union_identical = s1 + s1;
@@ -427,7 +427,7 @@ void test_intersection_operator()
     test_result("Intersection of overlapping sets cardinality", intersection_overlapping.cardinality() == 2);
     test_result("Intersection of overlapping sets contains common elements",
                 intersection_overlapping.contains(2) && intersection_overlapping.contains(3) &&
-                !intersection_overlapping.contains(1) && !intersection_overlapping.contains(4));
+                    !intersection_overlapping.contains(1) && !intersection_overlapping.contains(4));
 
     // Test intersection of identical sets
     Set<int> intersection_identical = s1 & s1;
@@ -480,7 +480,7 @@ void test_difference_operator()
     test_result("Difference of overlapping sets cardinality", difference_overlapping.cardinality() == 1);
     test_result("Difference of overlapping sets contains only unique elements",
                 difference_overlapping.contains(1) && !difference_overlapping.contains(2) &&
-                !difference_overlapping.contains(3) && !difference_overlapping.contains(4));
+                    !difference_overlapping.contains(3) && !difference_overlapping.contains(4));
 
     // Test difference of identical sets
     Set<int> difference_identical = s1 - s1;
@@ -508,7 +508,7 @@ void test_operator_combinations()
     B.insert(3);
     C.insert(2);
     C.insert(4);
-    
+
     Set<int> union_AB = A + B;
     Set<int> intersection_result = union_AB & C;
     test_result("Complex: (A ∪ B) ∩ C", intersection_result.contains(2) && intersection_result.cardinality() == 1);
@@ -517,9 +517,9 @@ void test_operator_combinations()
     Set<int> diff_AB = A - B;
     Set<int> diff_BA = B - A;
     Set<int> symmetric_diff = diff_AB + diff_BA;
-    test_result("Complex: Symmetric difference", 
-                symmetric_diff.contains(1) && symmetric_diff.contains(3) && 
-                !symmetric_diff.contains(2) && symmetric_diff.cardinality() == 2);
+    test_result("Complex: Symmetric difference",
+                symmetric_diff.contains(1) && symmetric_diff.contains(3) &&
+                    !symmetric_diff.contains(2) && symmetric_diff.cardinality() == 2);
 
     // Test A ⊆ (A ∪ B)
     Set<int> union_AB2 = A + B;
@@ -530,6 +530,87 @@ void test_operator_combinations()
     test_result("Complex: (A ∩ B) ⊆ A", intersection_AB <= A);
 }
 
+void time_test()
+{
+    Set<int> S;
+    // TO-DO: generate large set
+    Set<int> T;
+    // TO-DO: generate large set
+    int total = 0;
+
+    int val = rand() % 100000;
+    auto begin = std::chrono::high_resolution_clock::now();
+    S.insert(val);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "insert time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.remove(val);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "remove time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.cardinality();
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "cardinality time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    S.empty();
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "empty time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    val = rand() % 100000;
+    begin = std::chrono::high_resolution_clock::now();
+    bool r = S.contains(val);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "contains time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    r = (S == T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "equality time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    r = (S <= T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "subset time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    Set<int> U = (S + T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "union time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    U = (S & T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "intersection time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+
+    begin = std::chrono::high_resolution_clock::now();
+    U = (S - T);
+    end = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cout << "difference time test took " << elapsed.count() << " nanoseconds" << endl;
+    total += elapsed.count();
+    cout << "Total time: " << total << endl;
+}
 
 int main()
 {
@@ -555,6 +636,7 @@ int main()
     test_intersection_operator();
     test_difference_operator();
     test_operator_combinations();
+    time_test();
 
     cout << endl
          << "=================================" << endl;
